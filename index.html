@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head>
+        <title>ReduxChat</title>
+        <style>
+            html, body { height: 100%; }
+            body { line-height: 1; background: #eee; text-align: left; }
+            * { border: 0; outline: none; font-size: 100%; font: inherit; vertical-align: baseline; margin: 0; padding: 0; box-sizing: border-box; color: #000; }
+            * { font-family: sans-serif; font-size: 14px; line-height: 1.4; }
+
+
+            input, button {
+                border: 1px solid #000;
+                padding: 5px;
+                width: 200px;
+            }
+
+            label {
+                display: block;
+                text-align: 
+            }
+
+            button {
+                background: #ddd;
+                text-transform: uppercase;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .input-wr {
+                display: block;
+                padding: 15px;
+                width: 100%;
+            }
+
+                .input-wr.full-width {
+                    display: flex;
+                }
+
+                .full-width input { 
+                    width: auto;
+                    margin-right: 5px;
+                    flex-grow: 1;
+                }
+
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .signin-forum {
+                background: #fff;
+                box-shadow: 1px 1px 5px #555;
+                width: 250px;
+                height: 250px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                display: none;
+            }
+
+            .chat-form {
+                background: #fff;
+                box-shadow: 1px 1px 5px #555;
+                width: 800px;
+                height: 600px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .chat-log {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+                overflow-y: scroll;
+                border: 1px solid #000;
+                padding: 20px;
+            }
+
+            .chat-msg {
+                padding: 10px;
+            }
+
+            .msg-name {
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .msg-name:after {
+                content: ': ';
+            }
+
+            .msg-text {
+
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div class="signin-forum">
+            <form>
+                <div class="input-wr">
+                    <label>Name:</label>
+                    <input value="" placeholder="Name">
+                </div>
+                <div class="input-wr">
+                    <label>Room:</label>
+                    <input value="" placeholder="Room">
+                </div>
+                <div class="input-wr">
+                    <button>Join</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="chat-form">
+            <div class="chat-log">
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
+            </div>
+            <div class="input-wr full-width">
+                <input value="" placeholder="Message">
+                <button>Chat</button>
+            </div>
+        </div>
+
+        <script type="text/norun">
+            const sock = new WebSocket("ws://127.0.0.1:1234")
+
+            sock.onopen = function() {
+                console.log("connected")
+            }
+
+            sock.onclose = function(e) {
+                console.log("connection closed (" + e.code + ")")
+            }
+
+            sock.onmessage = function(e) {
+                console.log("message received: " + e.data)
+            }
+
+            function send() {
+                var msg = document.getElementById('message').value
+                sock.send(msg)
+            }
+        </script>
+    </body>
+</html>

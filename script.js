@@ -2,22 +2,38 @@ const { connect, Provider } = ReactRedux;
 const { createStore } = Redux;
 const { Component } = React;
 
-const initialState = { }
+const initialState = {
+  current: 'SIGN_IN',
+  name: 'Guest',
+  room: 'Default',
+  message: '',
+  chatMessages: []
+}
 
 function reducer (state = initialState, action) {
+    switch (action.type) {
+    case 'NAME_CHANGE':
+      return { ...state, name: action.name }
+    case 'ROOM_CHANGE':
+      return { ...state, room: action.room }
+    case 'MESSAGE_CHANGE':
+      return { ...state, message: action.message }
+    case 'WINDOW_CHANGE':
+      return { ...state, current: action.current }
+  }
   return state;
 }
 
-const SignInForm = (() => (
-  <div className="signin-forum">
+const _SignInForm = (({ current }) => (
+  <div className={ current === 'SIGN_IN' ? 'signin-forum' : 'hide' }>
       <form>
           <div className="input-wr">
               <label>Name:</label>
-              <input value="" placeholder="Name" />
+              <input value="" placeholder="Geust" />
           </div>
           <div className="input-wr">
               <label>Room:</label>
-              <input value="" placeholder="Room" />
+              <input value="" placeholder="Default" />
           </div>
           <div className="input-wr">
               <button>Join</button>
@@ -37,8 +53,8 @@ const ChatForm = (() => (
   </div>
 ))
 
-const ChatWindow = (() => (
-  <div className="chat-form">
+const _ChatWindow = (({ current }) => (
+  <div className={ current === 'CHAT' ? 'chat-form' : 'hide' }>
       <div className="chat-log">
           <ChatMessage />
       </div>
@@ -46,12 +62,15 @@ const ChatWindow = (() => (
   </div>
 ))
 
+const SignInForm = connect(state => ({ current: state.current }))(_SignInForm);
+const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow);
 const store = createStore(reducer)
 // store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
     <Provider store={store}>
       <div>
+        <SignInForm />
         <ChatWindow />
       </div>
     </Provider>,

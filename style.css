@@ -3,7 +3,6 @@ body { line-height: 1; background: #eee; text-align: left; }
 * { border: 0; outline: none; font-size: 100%; font: inherit; vertical-align: baseline; margin: 0; padding: 0; box-sizing: border-box; color: #000; }
 * { font-family: sans-serif; font-size: 14px; line-height: 1.4; }
 
-
 input, button {
     border: 1px solid #000;
     padding: 5px;
@@ -24,7 +23,10 @@ button {
 }
 
 .hide {
-    display: none !important;
+    opacity: 0;
+    transform: scale(0);
+    height: 0px;
+    width: 0px;
 }
 
 .input-wr {
@@ -58,6 +60,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    transition: all 0.5s;
 }
 
 .chat-form {
@@ -69,6 +72,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    transition: all 0.5s;
 }
 
 .chat-log {

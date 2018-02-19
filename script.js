@@ -24,19 +24,19 @@ function reducer (state = initialState, action) {
   return state;
 }
 
-const _SignInForm = (({ current }) => (
+const _SignInForm = (({ current, name, room }) => (
   <div className={ current === 'SIGN_IN' ? 'signin-forum' : 'hide' }>
       <form>
           <div className="input-wr">
               <label>Name:</label>
-              <input value="" placeholder="Geust" />
+              <input value={ name } onClick={(event) => event.target.value=""} onChange={(event) => store.dispatch({ type: 'NAME_CHANGE', text: event.target.value })} placeholder="Geust" />
           </div>
           <div className="input-wr">
               <label>Room:</label>
-              <input value="" placeholder="Default" />
+              <input value={ room } onClick={(event) => event.target.value=""} onChange={(event) => store.dispatch({ type: 'ROOM_CHANGE', text: event.target.value })} placeholder="Default" />
           </div>
           <div className="input-wr">
-              <button>Join</button>
+              <button onClick={(event) => { event.preventDefault(); store.dispatch({ type: 'WINDOW_CHANGE', current: 'CHAT' })}}>Join</button>
           </div>
       </form>
   </div>
@@ -62,7 +62,7 @@ const _ChatWindow = (({ current }) => (
   </div>
 ))
 
-const SignInForm = connect(state => ({ current: state.current }))(_SignInForm);
+const SignInForm = connect(state => ({ current: state.current, name: state.name, room: state.room  }))(_SignInForm);
 const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow);
 const store = createStore(reducer)
 // store.subscribe(() => console.log(store.getState()))

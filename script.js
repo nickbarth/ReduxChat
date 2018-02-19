@@ -21,26 +21,67 @@ function reducer (state = initialState, action) {
     case 'WINDOW_CHANGE':
       return { ...state, current: action.current }
   }
-  return state;
+  return state
 }
 
-const _SignInForm = (({ current, name, room }) => (
-  <div className={ current === 'SIGN_IN' ? 'signin-forum' : 'hide' }>
-      <form>
-          <div className="input-wr">
-              <label>Name:</label>
-              <input value={ name } onClick={(event) => event.target.value=""} onChange={(event) => store.dispatch({ type: 'NAME_CHANGE', text: event.target.value })} placeholder="Geust" />
-          </div>
-          <div className="input-wr">
-              <label>Room:</label>
-              <input value={ room } onClick={(event) => event.target.value=""} onChange={(event) => store.dispatch({ type: 'ROOM_CHANGE', text: event.target.value })} placeholder="Default" />
-          </div>
-          <div className="input-wr">
-              <button onClick={(event) => { event.preventDefault(); store.dispatch({ type: 'WINDOW_CHANGE', current: 'CHAT' })}}>Join</button>
-          </div>
-      </form>
-  </div>
-))
+class _SignInForm extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      name: (props.name === 'Guest') ? '' : props.name,
+      room: (props.room === 'Default') ? '' : props.room
+    }
+
+    this.nameDidChange = this.nameDidChange.bind(this)
+    this.roomDidChange = this.roomDidChange.bind(this)
+    this.formDidSubmit = this.formDidSubmit.bind(this)
+  }
+
+  nameDidChange(event) {
+    this.setState({ name: event.target.value })
+  }
+
+  roomDidChange(event) {
+    this.setState({ room: event.target.value })
+  }
+
+  formDidSubmit(event) {
+    event.preventDefault()
+    const { name, room } = this.state
+
+    if (name !== "")
+      store.dispatch({ type: 'NAME_CHANGE', name })
+
+    if (room !== "")
+      store.dispatch({ type: 'ROOM_CHANGE', room })
+
+    store.dispatch({ type: 'WINDOW_CHANGE', current: 'CHAT' })
+  }
+
+  render() {
+    const { current } = this.props
+    const { name, room } = this.state
+
+    return (
+      <div className={ current === 'SIGN_IN' ? 'signin-forum' : 'hide' }>
+          <form>
+              <div className="input-wr">
+                  <label>Name:</label>
+                  <input value={ name } onChange={ this.nameDidChange } placeholder="Guest" />
+              </div>
+              <div className="input-wr">
+                  <label>Room:</label>
+                  <input value={ room } onChange={ this.roomDidChange } placeholder="Default" />
+              </div>
+              <div className="input-wr">
+                  <button onClick={ this.formDidSubmit }>Join</button>
+              </div>
+          </form>
+      </div>
+    )
+  }
+}
 
 const ChatMessage = (({ name, message }) => (
   <div className="chat-msg"><span className="msg-name">{ name }</span><span className="msg-text">{ message }</span></div>
@@ -70,7 +111,8 @@ const SignInForm = connect(state => ({ current: state.current, name: state.name,
 const ChatMessages = connect(state => ({ messages: state.chatMessages }))(_ChatMessages);
 const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow);
 const store = createStore(reducer)
-// store.subscribe(() => console.log(store.getState()))
+
+store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
     <Provider store={store}>

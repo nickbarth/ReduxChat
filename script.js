@@ -6,7 +6,6 @@ const initialState = {
   current: 'SIGN_IN',
   name: 'Guest',
   room: 'Default',
-  message: '',
   chatMessages: [{ name: 'Nick', text: 'Hello World.'}]
 }
 
@@ -16,8 +15,8 @@ function reducer (state = initialState, action) {
       return { ...state, name: action.name }
     case 'ROOM_CHANGE':
       return { ...state, room: action.room }
-    case 'MESSAGE_CHANGE':
-      return { ...state, message: action.message }
+    case 'ADD_MESSAGE':
+      return { ...state, chatMessages: action.messages }
     case 'WINDOW_CHANGE':
       return { ...state, current: action.current }
   }
@@ -93,12 +92,44 @@ const _ChatMessages = ({messages}) => (
   </div>
 )
 
-const ChatForm = (() => (
-  <div className="input-wr full-width">
-      <input value="" placeholder="Message" />
-      <button>Chat</button>
-  </div>
-))
+class _ChatForm extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { message: '' }
+    this.messageDidChange = this.messageDidChange.bind(this)
+    this.formDidSubmit = this.formDidSubmit.bind(this)
+  }
+
+  messageDidChange(event) {
+    this.setState({ message: event.target.value })
+  }
+
+  formDidSubmit(event) {
+    event.preventDefault()
+    const { name, messages } = this.props
+    const { message } = this.state
+
+    if (message !== "") {
+      store.dispatch({ type: 'ADD_MESSAGE', messages: [
+        ...messages, { name, text: message }
+      ]})
+
+      this.setState({ message: '' })
+    }
+  }
+
+  render() {
+    const { message } = this.state
+
+    return (
+      <div className="input-wr full-width">
+          <input value={ message } onChange={ this.messageDidChange } placeholder="Message" />
+          <button onClick={ this.formDidSubmit }>Chat</button>
+      </div>
+    )
+  }
+}
 
 const _ChatWindow = (({ current }) => (
   <div className={ current === 'CHAT' ? 'chat-form' : 'hide' }>
@@ -109,6 +140,7 @@ const _ChatWindow = (({ current }) => (
 
 const SignInForm = connect(state => ({ current: state.current, name: state.name, room: state.room  }))(_SignInForm);
 const ChatMessages = connect(state => ({ messages: state.chatMessages }))(_ChatMessages);
+const ChatForm = connect(state => ({ name: state.name, messages: state.chatMessages }))(_ChatForm);
 const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow);
 const store = createStore(reducer)
 

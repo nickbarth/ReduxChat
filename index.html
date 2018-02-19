@@ -5,76 +5,12 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-
-        <div class="signin-forum">
-            <form>
-                <div class="input-wr">
-                    <label>Name:</label>
-                    <input value="" placeholder="Name">
-                </div>
-                <div class="input-wr">
-                    <label>Room:</label>
-                    <input value="" placeholder="Room">
-                </div>
-                <div class="input-wr">
-                    <button>Join</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="chat-form hide">
-            <div class="chat-log">
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-                <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
-            </div>
-            <div class="input-wr full-width">
-                <input value="" placeholder="Message">
-                <button>Chat</button>
-            </div>
-        </div>
-
-        <script type="text/norun">
-            const sock = new WebSocket("ws://127.0.0.1:1234")
-
-            sock.onopen = function() {
-                console.log("connected")
-            }
-
-            sock.onclose = function(e) {
-                console.log("connection closed (" + e.code + ")")
-            }
-
-            sock.onmessage = function(e) {
-                console.log("message received: " + e.data)
-            }
-
-            function send() {
-                var msg = document.getElementById('message').value
-                sock.send(msg)
-            }
-        </script>
+        <div id="app"></div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/4.4.5/react-redux.js"></script>
-        <script src="script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+        <script type="text/babel" src="script.js"></script>
     </body>
 </html>

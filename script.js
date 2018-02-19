@@ -63,21 +63,19 @@ class _SignInForm extends Component {
     const { name, room } = this.state
 
     return (
-      <div className={ current === 'SIGN_IN' ? 'signin-forum' : 'hide' }>
-          <form>
-              <div className="input-wr">
-                  <label>Name:</label>
-                  <input value={ name } onChange={ this.nameDidChange } placeholder="Guest" />
-              </div>
-              <div className="input-wr">
-                  <label>Room:</label>
-                  <input value={ room } onChange={ this.roomDidChange } placeholder="Default" />
-              </div>
-              <div className="input-wr">
-                  <button onClick={ this.formDidSubmit }>Join</button>
-              </div>
-          </form>
-      </div>
+      <form onSubmit={ this.formDidSubmit } className={ current === 'SIGN_IN' ? 'signin-forum' : 'hide' }>
+          <div className="input-wr">
+              <label>Name:</label>
+              <input value={ name } onChange={ this.nameDidChange } placeholder="Guest" />
+          </div>
+          <div className="input-wr">
+              <label>Room:</label>
+              <input value={ room } onChange={ this.roomDidChange } placeholder="Default" />
+          </div>
+          <div className="input-wr">
+              <button type="submit">Join</button>
+          </div>
+      </form>
     )
   }
 }
@@ -117,16 +115,20 @@ class _ChatForm extends Component {
 
       this.setState({ message: '' })
     }
+
+    this.textInput.focus()
   }
 
   render() {
     const { message } = this.state
 
     return (
-      <div className="input-wr full-width">
-          <input value={ message } onChange={ this.messageDidChange } placeholder="Message" />
-          <button onClick={ this.formDidSubmit }>Chat</button>
-      </div>
+      <form onSubmit={ this.formDidSubmit }>
+          <div className="input-wr full-width">
+              <input ref={(input) => { this.textInput = input }} value={ message } onChange={ this.messageDidChange } placeholder="Message" />
+              <button type="submit">Chat</button>
+          </div>
+      </form>
     )
   }
 }

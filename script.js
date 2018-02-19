@@ -7,7 +7,7 @@ const initialState = {
   name: 'Guest',
   room: 'Default',
   message: '',
-  chatMessages: []
+  chatMessages: [{ name: 'Nick', text: 'Hello World.'}]
 }
 
 function reducer (state = initialState, action) {
@@ -42,9 +42,15 @@ const _SignInForm = (({ current, name, room }) => (
   </div>
 ))
 
-const ChatMessage = (() => (
-  <div className="chat-msg"><span className="msg-name">Name</span><span className="msg-text">Here is a test message for styling.</span></div>
+const ChatMessage = (({ name, message }) => (
+  <div className="chat-msg"><span className="msg-name">{ name }</span><span className="msg-text">{ message }</span></div>
 ))
+
+const _ChatMessages = ({messages}) => (
+  <div className="chat-log">
+      { messages.map((message, index) => <ChatMessage key={index} name={message.name} message={message.text} />) }
+  </div>
+)
 
 const ChatForm = (() => (
   <div className="input-wr full-width">
@@ -55,14 +61,13 @@ const ChatForm = (() => (
 
 const _ChatWindow = (({ current }) => (
   <div className={ current === 'CHAT' ? 'chat-form' : 'hide' }>
-      <div className="chat-log">
-          <ChatMessage />
-      </div>
+      <ChatMessages />
       <ChatForm />
   </div>
 ))
 
 const SignInForm = connect(state => ({ current: state.current, name: state.name, room: state.room  }))(_SignInForm);
+const ChatMessages = connect(state => ({ messages: state.chatMessages }))(_ChatMessages);
 const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow);
 const store = createStore(reducer)
 // store.subscribe(() => console.log(store.getState()))

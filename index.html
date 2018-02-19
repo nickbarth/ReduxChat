@@ -2,104 +2,7 @@
 <html lang="en" >
     <head>
         <title>ReduxChat</title>
-        <style>
-            html, body { height: 100%; }
-            body { line-height: 1; background: #eee; text-align: left; }
-            * { border: 0; outline: none; font-size: 100%; font: inherit; vertical-align: baseline; margin: 0; padding: 0; box-sizing: border-box; color: #000; }
-            * { font-family: sans-serif; font-size: 14px; line-height: 1.4; }
-
-
-            input, button {
-                border: 1px solid #000;
-                padding: 5px;
-                width: 200px;
-            }
-
-            label {
-                display: block;
-                text-align: 
-            }
-
-            button {
-                background: #ddd;
-                text-transform: uppercase;
-                font-weight: 400;
-                font-size: 12px;
-                line-height: 1.4;
-            }
-
-            .input-wr {
-                display: block;
-                padding: 15px;
-                width: 100%;
-            }
-
-                .input-wr.full-width {
-                    display: flex;
-                }
-
-                .full-width input { 
-                    width: auto;
-                    margin-right: 5px;
-                    flex-grow: 1;
-                }
-
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .signin-forum {
-                background: #fff;
-                box-shadow: 1px 1px 5px #555;
-                width: 250px;
-                height: 250px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-wrap: wrap;
-                display: none;
-            }
-
-            .chat-form {
-                background: #fff;
-                box-shadow: 1px 1px 5px #555;
-                width: 800px;
-                height: 600px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-
-            .chat-log {
-                width: 100%;
-                height: 100%;
-                background: #fff;
-                overflow-y: scroll;
-                border: 1px solid #000;
-                padding: 20px;
-            }
-
-            .chat-msg {
-                padding: 10px;
-            }
-
-            .msg-name {
-                font-size: 16px;
-                font-weight: 600;
-            }
-
-            .msg-name:after {
-                content: ': ';
-            }
-
-            .msg-text {
-
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
 
@@ -119,7 +22,7 @@
             </form>
         </div>
 
-        <div class="chat-form">
+        <div class="chat-form hide">
             <div class="chat-log">
                 <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
                 <div class="chat-msg"><span class="msg-name">Name</span><span class="msg-text">Here is a test message for styling.</span></div>
@@ -168,5 +71,10 @@
                 sock.send(msg)
             }
         </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/4.4.5/react-redux.js"></script>
+        <script src="script.js"></script>
     </body>
 </html>

@@ -20,7 +20,9 @@ function reducer (state = initialState, action) {
       socket.emit('ROOM_CHANGE', action.room)
       return { ...state, room: action.room }
     case 'ADD_MESSAGE':
-      return { ...state, chatMessages: action.messages }
+      return { ...state, chatMessages: [ ...state.chatMessages,
+        { name: action.name, text: action.text } ]
+      }
     case 'WINDOW_CHANGE':
       return { ...state, current: action.current }
   }
@@ -98,15 +100,16 @@ class _ChatMessages extends Component {
     const { dispatch } = this.props
 
     socket.on('ADD_MESSAGE', function (message) {
-      console.log('== got message ==')
-      console.log(message)
-      console.log('== got message ==')
-      return dispatch({ type: 'ADD_MESSAGE', message })
+      return dispatch({ type: 'ADD_MESSAGE', ...message })
     })
   }
 
   render() {
-    const { messages } = this.props
+    let { messages } = this.props
+
+    if (!messages) {
+      messages = []
+    }
 
     return (
       <div className="chat-log">
@@ -135,10 +138,7 @@ class _ChatForm extends Component {
     const { message } = this.state
 
     if (message !== "") {
-      store.dispatch({ type: 'ADD_MESSAGE', messages: [
-        ...messages, { name, text: message }
-      ]})
-
+      store.dispatch({ type: 'ADD_MESSAGE', name, text: message })
       socket.emit('ADD_MESSAGE', message)
       this.setState({ message: '' })
     }

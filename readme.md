@@ -1,6 +1,8 @@
 # ReduxChat
 
-A React Redux Chat Room.
+A React Redux Chat Room using Socket.IO.
+
+https://reduxchat.herokuapp.com/
 
 ### Notes
 

@@ -1,19 +1,23 @@
-const { connect, Provider } = ReactRedux;
-const { createStore } = Redux;
-const { Component } = React;
+const socket = io()
+
+const { connect, Provider } = ReactRedux
+const { createStore } = Redux
+const { Component } = React
 
 const initialState = {
   current: 'SIGN_IN',
   name: 'Guest',
   room: 'Default',
-  chatMessages: [{ name: 'Nick', text: 'Hello World.'}]
+  chatMessages: [{ name: 'Nick', text: 'Hello World.' }]
 }
 
 function reducer (state = initialState, action) {
     switch (action.type) {
     case 'NAME_CHANGE':
+      socket.emit('NAME_CHANGE', action.name)
       return { ...state, name: action.name }
     case 'ROOM_CHANGE':
+      socket.emit('ROOM_CHANGE', action.room)
       return { ...state, room: action.room }
     case 'ADD_MESSAGE':
       return { ...state, chatMessages: action.messages }
@@ -49,11 +53,11 @@ class _SignInForm extends Component {
     event.preventDefault()
     const { name, room } = this.state
 
-    if (name !== "")
-      store.dispatch({ type: 'NAME_CHANGE', name })
+    if (name !== "") store.dispatch({ type: 'NAME_CHANGE', name })
+    else store.dispatch({ type: 'NAME_CHANGE', name: 'Guest' })
 
-    if (room !== "")
-      store.dispatch({ type: 'ROOM_CHANGE', room })
+    if (room !== "") store.dispatch({ type: 'ROOM_CHANGE', room })
+    else store.dispatch({ type: 'ROOM_CHANGE', room: 'Default' })
 
     store.dispatch({ type: 'WINDOW_CHANGE', current: 'CHAT' })
   }
@@ -73,7 +77,7 @@ class _SignInForm extends Component {
               <input value={ room } onChange={ this.roomDidChange } placeholder="Default" />
           </div>
           <div className="input-wr">
-              <button type="submit">Join</button>
+              <button>Join</button>
           </div>
       </form>
     )
@@ -84,11 +88,33 @@ const ChatMessage = (({ name, message }) => (
   <div className="chat-msg"><span className="msg-name">{ name }</span><span className="msg-text">{ message }</span></div>
 ))
 
-const _ChatMessages = ({messages}) => (
-  <div className="chat-log">
-      { messages.map((message, index) => <ChatMessage key={index} name={message.name} message={message.text} />) }
-  </div>
-)
+class _ChatMessages extends Component {
+  constructor(props) {
+    super(props)
+    this.didReceiveMessage.bind(this)()
+  }
+
+  didReceiveMessage() {
+    const { dispatch } = this.props
+
+    socket.on('ADD_MESSAGE', function (message) {
+      console.log('== got message ==')
+      console.log(message)
+      console.log('== got message ==')
+      return dispatch({ type: 'ADD_MESSAGE', message })
+    })
+  }
+
+  render() {
+    const { messages } = this.props
+
+    return (
+      <div className="chat-log">
+          { messages.map((message, index) => <ChatMessage key={index} name={message.name} message={message.text} />) }
+      </div>
+    )
+  }
+}
 
 class _ChatForm extends Component {
   constructor(props) {
@@ -113,6 +139,7 @@ class _ChatForm extends Component {
         ...messages, { name, text: message }
       ]})
 
+      socket.emit('ADD_MESSAGE', message)
       this.setState({ message: '' })
     }
 
@@ -126,7 +153,7 @@ class _ChatForm extends Component {
       <form onSubmit={ this.formDidSubmit }>
           <div className="input-wr full-width">
               <input ref={(input) => { this.textInput = input }} value={ message } onChange={ this.messageDidChange } placeholder="Message" />
-              <button type="submit">Chat</button>
+              <button>Chat</button>
           </div>
       </form>
     )
@@ -140,41 +167,20 @@ const _ChatWindow = (({ current }) => (
   </div>
 ))
 
-const SignInForm = connect(state => ({ current: state.current, name: state.name, room: state.room  }))(_SignInForm);
-const ChatMessages = connect(state => ({ messages: state.chatMessages }))(_ChatMessages);
-const ChatForm = connect(state => ({ name: state.name, messages: state.chatMessages }))(_ChatForm);
-const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow);
+const SignInForm = connect(state => ({ current: state.current, name: state.name, room: state.room  }))(_SignInForm)
+const ChatMessages = connect(state => ({ messages: state.chatMessages }))(_ChatMessages)
+const ChatForm = connect(state => ({ name: state.name, messages: state.chatMessages }))(_ChatForm)
+const ChatWindow = connect(state => ({ current: state.current }))(_ChatWindow)
 const store = createStore(reducer)
 
 store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
-    <Provider store={store}>
-      <div>
-        <SignInForm />
-        <ChatWindow />
-      </div>
-    </Provider>,
-    document.getElementById('app')
+  <Provider store={store}>
+    <div>
+      <SignInForm />
+      <ChatWindow />
+    </div>
+  </Provider>,
+  document.getElementById('app')
 )
-
-/*
-const sock = new WebSocket("ws://127.0.0.1:1234")
-
-sock.onopen = function() {
-    console.log("connected")
-}
-
-sock.onclose = function(e) {
-    console.log("connection closed (" + e.code + ")")
-}
-
-sock.onmessage = function(e) {
-    console.log("message received: " + e.data)
-}
-
-function send() {
-    var msg = document.getElementById('message').value
-    sock.send(msg)
-}
-*/

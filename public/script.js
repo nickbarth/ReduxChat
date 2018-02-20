@@ -1,5 +1,4 @@
 const socket = io()
-
 const { connect, Provider } = ReactRedux
 const { createStore } = Redux
 const { Component } = React
@@ -8,7 +7,7 @@ const initialState = {
   current: 'SIGN_IN',
   name: 'Guest',
   room: 'Default',
-  chatMessages: [{ name: 'Nick', text: 'Hello World.' }]
+  chatMessages: []
 }
 
 function reducer (state = initialState, action) {
